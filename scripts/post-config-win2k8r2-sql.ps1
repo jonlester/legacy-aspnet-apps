@@ -5,7 +5,7 @@ function DownloadAndExpand
         [string]$AppName
     )
 
-    Invoke-WebRequest "https://github.com/ivegamsft/AppMigrationWorkshop/raw/master/Shared/SourceApps/Apps/$AppName.zip" -OutFile "$AppName.zip"
+    Invoke-WebRequest "https://github.com/jonlester/legacy-aspnet-apps/releases/download/dummy-release/$AppName.zip" -OutFile "$AppName.zip"
     Expand-Archive -Path "$AppName.zip" -DestinationPath "C:\Apps\$AppName"
     ((Get-Content -path C:\Apps\$AppName\web.config -Raw) -replace '<sqlServerName>.appmig.local',$env:computername) | Set-Content -Path C:\Apps\$AppName\web.config
    
@@ -19,7 +19,7 @@ function DownloadAndExpand
 Set-ExecutionPolicy -ExecutionPolicy Unrestricted -Scope CurrentUser -Force
 
 #install chocolatey to do some of the heavy lifting
-iex ((New-Object System.Net.WebClient).DownloadString('https://chocolatey.org/install.ps1'))
+Invoke-Expression ((New-Object System.Net.WebClient).DownloadString('https://chocolatey.org/install.ps1'))
 choco feature enable -n allowGlobalConfirmation
 
 #upgrade dot net (4.5.2)
@@ -33,16 +33,16 @@ net user AppsSvcAcct password1234! /ADD
 c:\Windows\Microsoft.NET\Framework\v2.0.50727\aspnet_regiis.exe -ga ${env:computername}\AppsSvcAcct
 
 #install databases
-md c:\Databases
+mkdir c:\Databases
 SQLCMD -E -S ${env:computername} -Q "CREATE LOGIN [${env:computername}\AppsSvcAcct] FROM WINDOWS"
 
-Invoke-WebRequest "https://raw.githubusercontent.com/ivegamsft/AppMigrationWorkshop/master/Shared/SourceApps/Databases/TimeTracker.bak" -OutFile "c:\databases\timetracker.bak"
+Invoke-WebRequest "https://github.com/jonlester/legacy-aspnet-apps/releases/download/dummy-release/TimeTracker.bak" -OutFile "c:\databases\timetracker.bak"
 SQLCMD -E -S ${env:computername} -Q "RESTORE DATABASE [TimeTracker] FROM DISK='C:\Databases\timetracker.bak' WITH MOVE 'tempname' TO 'C:\Databases\timetracker.mdf', MOVE 'TimeTracker_Log' TO 'C:\Databases\timetracker_log.ldf'"
 
-Invoke-WebRequest "https://raw.githubusercontent.com/ivegamsft/AppMigrationWorkshop/master/Shared/SourceApps/Databases/Classifieds.bak" -OutFile "c:\databases\Classifieds.bak"
+Invoke-WebRequest "https://github.com/jonlester/legacy-aspnet-apps/releases/download/dummy-release/Classifieds.bak" -OutFile "c:\databases\Classifieds.bak"
 SQLCMD -E -S ${env:computername} -Q "RESTORE DATABASE [Classifieds] FROM DISK='C:\Databases\Classifieds.bak' WITH MOVE 'Database' TO 'C:\Databases\classifieds.mdf', MOVE 'Database_log' TO 'C:\Databases\classifieds_log.ldf'"
 
-Invoke-WebRequest "https://raw.githubusercontent.com/ivegamsft/AppMigrationWorkshop/master/Shared/SourceApps/Databases/Jobs.bak" -OutFile "c:\databases\Jobs.bak"
+Invoke-WebRequest "https://github.com/jonlester/legacy-aspnet-apps/releases/download/dummy-release/Jobs.bak" -OutFile "c:\databases\Jobs.bak"
 SQLCMD -E -S ${env:computername} -Q "RESTORE DATABASE [Jobs] FROM DISK='C:\Databases\Jobs.bak' WITH MOVE 'EmptyDatabase' TO 'C:\Databases\jobs.mdf', MOVE 'EmptyDatabase_log' TO 'C:\Databases\jobs_log.ldf'"
 
 SQLCMD -E -S ${env:computername} -Q "USE timetracker; CREATE USER [${env:computername}\AppsSvcAcct]; EXEC sp_addrolemember 'db_owner', '${env:computername}\AppsSvcAcct'"

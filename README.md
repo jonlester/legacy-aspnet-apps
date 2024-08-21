@@ -22,3 +22,13 @@ az deployment sub create \
     --template-file ./main.bicep \
     --parameters vmAdminPassword={ password }
 ```
+
+After the VM is created and the apps are configured, it will reboot.  Once it is started again, it is ready to use.
+
+## Troubleshooting
+
+You can reference the [steps to manually configure the apps](./docs/apps-manual-configuration.md) if necessary.  These instructions were taken from an old hands-on lab and implemented in the vm [initialization script](./scripts/post-config-win2k8r2-sql.ps1), but the doc may be useful if errors occur.
+
+## Source Apps
+
+All the zip files and database backups for the apps can be found as artifacts in [this release](https://github.com/jonlester/legacy-aspnet-apps/releases/tag/dummy-release), which exists purely for their storage.
