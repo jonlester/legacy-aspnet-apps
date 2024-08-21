@@ -31,4 +31,5 @@ You can reference the [steps to manually configure the apps](./docs/apps-manual-
 
 ## Source Apps
 
-All the zip files and database backups for the apps can be found as artifacts in [this release](https://github.com/jonlester/legacy-aspnet-apps/releases/tag/dummy-release), which exists purely for their storage.
+- All the zip files and database backups for the apps can be found as artifacts in [this release](https://github.com/jonlester/legacy-aspnet-apps/releases/tag/dummy-release), which exists purely for their storage.
+- The legacy application source code can be found in the [legacy-aspnet-apps-src](https://github.com/jonlester/legacy-aspnet-apps-src) repo.
